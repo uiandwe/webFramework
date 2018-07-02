@@ -23,6 +23,9 @@ module.exports = {
             'allowNull': false
         },
         'collectionPageId': {
+            'reference': 'collectionPage',
+            'referenceKey': 'id',
+            'as': 'page',
             'type': Sequelize.INTEGER,
             'allowNull': false
         }
