@@ -4,7 +4,7 @@ module.exports = {
         port: 8089
     },
     db: {
-        database: "crawler",
+        database: "web_framework",
         username: "root",
         password: "Qw123456!@#$",
         host: "localhost",
