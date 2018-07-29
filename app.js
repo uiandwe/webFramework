@@ -92,6 +92,7 @@ app.use(function(err, req, res, next) {
 
 console.log('database info : ', config.db);
 sequelize.sync({force: config.db.force}).then(function (err) {
+
 }, function (err) {
   console.log('Unable to connect to the database:', err);
 });

@@ -26,8 +26,11 @@ module.exports = {
             'reference': 'collectionPage',
             'referenceKey': 'id',
             'as': 'page',
+            'asReverse': 'item',
             'type': Sequelize.INTEGER,
-            'allowNull': false
+            'allowNull': false,
+            'onDelete': 'CASCADE',
+            'onUpdate': 'CASCADE'
         }
     },
     options: {
