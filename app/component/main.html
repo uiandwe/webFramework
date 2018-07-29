@@ -1,0 +1,75 @@
+<!--<div id="editor">-->
+    <!--<textarea :value="input" @input="update"></textarea>-->
+    <!--<div v-html="compiledMarkdown"></div>-->
+<!--</div>-->
+
+<!-- modal -->
+<%- include ./modal/index.html %>
+
+
+
+
+
+
+
+<!-- app -->
+<div id="modal">
+    <button id="show-modal" @click="showModal = true">Show Modal</button>
+    <modal v-if="showModal" @close="showModal = false">
+        <h3 slot="header">custom header</h3>
+    </modal>
+</div>
+
+
+<div id="example">
+    <p>원본 메시지: "{{ message }}"</p>
+    <p>뒤집히도록 계산된 메시지: "{{ reversedMessage }}"</p>
+    <p>{{ now }} </p>
+</div>
+
+<div id="watch-example">
+    <p>
+        yes/no 질문을 물어보세요:
+        <input v-model="question">
+    </p>
+    <p>{{ answer }}</p>
+</div>
+
+<div class="container" id="app">
+    <div style="display:flex; flex-direction: column;">
+        <img :src="imageSrc" class="image">
+        <span class="btn btn-default btn-file">
+              Browse <input @change="uploadImage" type="file" name="image" accept="image/*">
+          </span>
+    </div>
+</div>
+
+<script>
+
+
+    new Vue({
+        el: '#editor',
+        data: {
+            input: '# hello'
+        },
+        computed: {
+            compiledMarkdown: function () {
+                return marked(this.input, { sanitize: true })
+            }
+        },
+        methods: {
+            update: _.debounce(function (e) {
+                this.input = e.target.value
+            }, 300)
+        }
+    });
+
+    // start modal
+    new Vue({
+        el: '#modal',
+        data: {
+            showModal: false
+        }
+    })
+
+</script>

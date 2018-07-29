@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>API Tester</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=8"/>
+    <link rel="icon" type="image/icon" href="/default/images/favicon.ico"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+    <style>
+        #myModal .modal-title{
+            color: #e87124;
+        }
+
+        #myModal .d-req-data, #myModal .d-data{
+            padding: 10px;
+            color: #7b8a8b;
+            background-color: #ecf0f1;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            font-size: 16px;
+            white-space: pre-line;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1>api-list</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2">
+            <h3>api list</h3>
+
+            <ul>
+                <% for(var i=0; i< categoryList.length; i++) {%>
+                <li><h3><a href="/api/tester/<%= categoryList[i]%>"><%= categoryList[i] %></a></h3></li>
+                <% } %>
+            </ul>
+        </div>
+        <div class="col-md-10">
+            <h4 class="d-url">/api/<%=apiName%></h4>
+
+            <ul class="nav nav-tabs">
+                <% for(var i=0; i<resource.methods.length; i++){%>
+                    <li <% if(i == 0) {%>class="active"<%}%>><a data-toggle="tab" href="#<%=resource.methods[i] %>"><%= resource.methods[i] %></a></li>
+                <% } %>
+            </ul>
+
+            <div class="tab-content">
+                <% for(var i=0; i<resource.resource.length; i++){%>
+                <div id="<%=resource.methods[i]%>" class="tab-pane fade <% if(i == 0) {%>in active<%}%>">
+                    <input type="hidden" class="parameters" value="<% for(var j=0; j<resource.resource[i].acceptable.length; j++){%>,<%=resource.resource[i].acceptable[j]%><% } %>"/>
+                    <h3><%=resource.resource[i].title%></h3>
+                    <form action="/api/<%=apiName%>" method="<%=resource.methods[i]%>" <% if(resource.resource[i].files > 0){%> enctype="multipart/form-data" <%}%>>
+                        <% for(var j=0; j<resource.resource[i].acceptable.length; j++){%>
+                        <div class="form-group">
+                            <label for="<%=resource.resource[i].acceptable[j]%>"><%=resource.resource[i].acceptable[j]%></label>
+                            <input type="text" class="form-control d-input d-<%=resource.resource[i].acceptable[j]%>"  placeholder="<%=resource.resource[i].explains[resource.resource[i].acceptable[j]]%>">
+                        </div>
+                        <% } %>
+
+                        <% if(resource.resource[i].param){%>
+                        <div class="form-group">
+                            <label><%=resource.resource[i].param%></label>
+                            <input type="text" class="form-control d-input d-<%=resource.resource[i].param%>"  placeholder="<%=resource.resource[0].explains[resource.resource[i].param]%>">
+                        </div>
+                        <% } %>
+
+                        <% if(resource.resource[i].files > 0){%>
+                            <% for(var j=0; j<resource.resource[i].files; j++){%>
+                                <div class="form-group">
+                                    <input type="file" name="file<%=j%>">
+                                </div>
+                            <% } %>
+                        <% } %>
+
+
+                        <button type="button" class="btn btn-success b-form-btn">Submit</button>
+                    </form>
+                </div>
+                <% } %>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row d-req-wrap">
+                        <div class="col-md-12">
+                            <h5>Request body</h5>
+                            <p class="d-req-data"></p>
+                        </div>
+                    </div>
+                    <div class="row d-res-wrap">
+                        <div class="col-md-12">
+                            <h5>Response body</h5>
+                            <h6 class="status"></h6>
+                            <p class="d-data"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+    $(".b-form-btn").click(function(){
+
+        var $form = $(this).parent("form");
+        var action = $form.attr('action');
+
+        if($form.attr('method') == 'get'){
+            var id = $(".tab-pane.in.active .d-input.d-id").val();
+            var url =  action+'/'+id;
+
+            setResponseModal("GET", url, {id: id});
+            sendAjax("GET", url);
+
+
+        }
+        else if($form.attr('method') == 'gets'){
+            var url =  action + getInputDataToQuery();
+            sendAjax("GET", url);
+        }
+        else if($form.attr('method') == 'post'){
+            var formData = getInputData();
+            var url =  action;
+            sendAjax("POST", url, formData);
+        }
+        else if($form.attr('method') == 'put'){
+            var formData = getInputData();
+            var id = $(".tab-pane.in.active .d-input.d-id").val();
+            var url =  action+'/'+id;
+
+            setResponseModal("PUT", url, {id: id});
+            sendAjax("PUT", url, formData);
+        }
+        else if($form.attr('method') == 'del'){
+
+        }
+        else{ // 에러
+            return ;
+        }
+    });
+
+    function sendAjax(method, url, formData){
+        $.ajax({
+            type : method,
+            url : url,
+            data: formData,
+            cache : false,
+            success : onSuccess,
+            error : onError
+        });
+    }
+
+    function setResponseModal(method, url, reqData){
+
+        $("#myModal").find(".modal-title").text(method+"  "+url);
+        $("#myModal").find(".d-req-data").text(objToString(reqData));
+    }
+
+    function onSuccess(data, status){
+        $("#myModal").find(".status").text(status);
+        $("#myModal").find(".d-data").text(objToString(data.data));
+        $('#myModal').modal('show');
+    }
+
+    function onError(data, status){
+        var reqData = JSON.parse(data.responseText);
+        $("#myModal").find(".status").text(data.status);
+        $("#myModal").find(".d-data").text(reqData.data);
+        $('#myModal').modal('show');
+    }
+
+
+    function getInputDataToQuery(){
+        var parameters = $(".tab-pane.in.active .parameters").val();
+        var query = [];
+        if(parameters.length > 0){
+            parameters = parameters.replace(",", "");
+            var parameterList = parameters.split(",");
+            for(var i=0; i<parameterList.length; i++){
+                var params = $(".tab-pane.in.active .d-input.d-"+parameterList[i]).val();
+                query.push(parameterList[i]+"="+params);
+            }
+        }
+
+        return "?"+query.join("&");
+    }
+
+    function getInputData(){
+        var parameters = $(".tab-pane.in.active .parameters").val();
+        var formData = {};
+        if(parameters.length > 0){
+            parameters = parameters.replace(",", "");
+            var parameterList = parameters.split(",");
+            for(var i=0; i<parameterList.length; i++){
+                var params = $(".tab-pane.in.active .d-input.d-"+parameterList[i]).val();
+                formData[parameterList[i]] = params;
+            }
+        }
+
+        return formData;
+
+    }
+
+
+    function objToString (data) {
+        var str = '';
+        console.log(data);
+        if(data.constructor === Array){
+            str += "[\r\n"
+            for(var i=0; i<data.length; i++){
+                str += "{\r\n"
+                var obj = data[i];
+                for (var p in obj) {
+                    if (obj.hasOwnProperty(p)) {
+                        str += p + ':  ' + obj[p] + ', \r\n';
+                    }
+                }
+                str += "},\r\n";
+            }
+            str += "]"
+        }
+        else{
+            var obj = data;
+            for (var p in obj) {
+                if (obj.hasOwnProperty(p)) {
+                    str += p + ':  ' + obj[p] + ', \r\n';
+                }
+            }
+        }
+
+        return str;
+    }
+
+</script>
+
+</body>
+</html>
