@@ -9,7 +9,7 @@ module.exports = {
     },
     error: function(res, status, data){
         if(status == 500){
-            console.error(err);
+            console.error(data);
         }
         if (data && data.constructor && data.constructor == Object){
             data = json.parse(data);

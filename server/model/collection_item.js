@@ -23,21 +23,15 @@ module.exports = {
             'allowNull': false
         },
         'collectionPageId': {
-            'reference': 'collectionPage',
-            'referenceKey': 'id',
-            'as': 'page',
-            'asReverse': 'item',
             'type': Sequelize.INTEGER,
-            'allowNull': false,
-            'onDelete': 'CASCADE',
-            'onUpdate': 'CASCADE'
+            'allowNull': false
         }
     },
     options: {
         'charset': 'utf8',
         'paranoid': true,
         'instanceMethods': Sequelize.Utils._.extend(mixin.options.instanceMethods, {}),
-        'classMethods': Sequelize.Utils._.extend({
+        'classMethods': Sequelize.Utils._.extend(mixin.options.classMethods, {
             "createCollectionItem": function(data, callback){
 
                 function createBulkcollectionItems (t) {

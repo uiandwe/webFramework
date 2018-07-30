@@ -19,7 +19,7 @@ module.exports = {
         'charset': 'utf8',
         'paranoid': true,
         'instanceMethods': Sequelize.Utils._.extend(mixin.options.instanceMethods, {}),
-        'classMethods': Sequelize.Utils._.extend({
+        'classMethods': Sequelize.Utils._.extend(mixin.options.classMethods, {
             "createCollectionPage": function(data, callback){
                 function createCollectionPage (t) {
                     return sequelize.models.collection_page.create(data, {

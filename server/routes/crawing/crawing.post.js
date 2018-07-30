@@ -119,7 +119,7 @@ post.saveCollectionItem = function(){
                 next();
             }
             else{
-                return response.error(res, status, json.parse(data));
+                return response.error(res, status, data);
             }
         })
     }
