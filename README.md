@@ -9,8 +9,8 @@ node app.js
 npm test
 
 ### doc
-grunt jsdoc:cliet
-grunt jsdoc:server
+##### $ grunt jsdoc:cliet
+##### $ grunt jsdoc:server
 
 ### 폴더 설명
 
