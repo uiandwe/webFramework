@@ -5,6 +5,7 @@ var post = {};
 
 post.validate = function () {
     return function (req, res, next) {
+
         next();
     };
 };

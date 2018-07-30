@@ -5,9 +5,8 @@
 
 
 var Sequelize = require('sequelize');
-var sequelize = require('./sequelize');
-var errorHandler = require('sg-sequelize-error-handler');
-var STD = require('../../../../bridge/metadata/standards');
+var sequelize = require('../config/sequelize');
+var errorHandler = require('../utils/sequelizeErrorHandler');
 var MICRO = require('microtime-nodejs');
 
 var mixin = {

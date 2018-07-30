@@ -8,5 +8,6 @@ sequelize.define("collection_page", collection_page.fields, collection_page.opti
 
 
 sequelize.models.collection_page.hasMany(sequelize.models.collection_item, {foreignKey: 'collectionPageId'});
+sequelize.models.collection_item.belongsTo(sequelize.models.collection_page, {foreignKey: 'id'});
 
 module.exports = sequelize.models;
