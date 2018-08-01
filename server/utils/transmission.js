@@ -59,4 +59,36 @@ module.exports = {
             }
         });
     },
+  findOrderReleaseImpossible: function (query, callback) {
+        var url = this.requestUrl() + '/api/trader-crm/order-release-impossible?' + this.encodeQueryData(query);
+        request.get({
+            url: url,
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8;'
+            }
+        }, function (err, response, body) {
+            if (err) {
+                console.error(err);
+                callback(400, {
+                    code: '400_0002'
+                });
+            } else {
+                try {
+                    body = JSON.parse(body);
+                    if (response.statusCode == 200) {
+                        callback(200, body);
+                    } else if (response.statusCode == 404) {
+                        callback(404, {
+                            code: '404_0004'
+                        });
+                    } else {
+                        callback(response.statusCode, body);
+                    }
+                } catch (e) {
+                    console.error(e);
+                    callback(400);
+                }
+            }
+        });
+    },
 };
