@@ -58,54 +58,38 @@ module.exports = {
                 });
             },
             "requestApi": function(body, callback){
-                var transaction = null;
+                var t = null;
 
                 function requestMsaApi(t){
 
-                    var funcs = [];
+                    var options = {
+                        method: 'POST',
+                        uri: 'http://localhost:8089/api/test',
+                        body: {
+                            some: 'payload'
+                        },
+                        json: true,
+                        resolveWithFullResponse: true
+                    };
 
-                    [''].forEach(function (item) {
-                        (function (item) {
-                            funcs.push(function (callback) {
-                                console.log(item)
+                    return rp(options).promise().bind(this)
+                        .then(function (parsedBody) {
+                            var status = parsedBody.body.status;
+                            var data = parsedBody.body.data;
 
-                                request.post({url:'http://localhost:8089/api/test',
-                                        form: body},
-                                    function(err, httpResponse ,body){
-                                        if(err){
-                                            t.rollback();
-                                            callback(400, httpResponse);
-                                        }
-                                        else{
-                                            body = JSON.parse(body);
-                                            if(body.status == 201){
-                                                callback(null, true);
-                                            }
-                                            else{
-                                                callback(body.status, body.data);
-                                            }
-                                        }
+                            if(status == 201){
+                                return true;
+                            }
+                            else{
+                                callback(body.status, body.data);
+                            }
+                        })
+                        .catch(function (err) {
+                            if(err){
+                                return false;
+                            }
+                        });
 
-                                    });
-                            });
-                        })(item);
-                    });
-
-
-
-                    async.series(funcs, function (errorCode, results) {
-                        if (errorCode) {
-                            console.log("requestMsaApi", errorCode);
-                            throw new errorHandler.CustomSequelizeError(400, {
-                                code: "400_0049"
-                            });
-                        }
-                        else{
-                            console.log("done");
-                            transaction = true;
-                            return true;
-                        }
-                    });
                 }
 
 
@@ -117,20 +101,20 @@ module.exports = {
                     },{
                         transaction: t
                     }).then(function (data) {
-                        console.log(requestMsaApi(t));
-                        return true;
+                        return requestMsaApi(t);
                     });
                 }
 
 
-
-                sequelize.transaction(function (t) {
+                sequelize.transaction({ autocommit: false }).then(function (transaction) {
+                    t = transaction;
                     return createTest(t);
-                }).catch(errorHandler.catchCallback(callback)).done(function () {
-                    if (transaction) {
+                }).catch(errorHandler.catchCallback(callback)).done(function (isSuccess) {
+                    if (isSuccess) {
                         callback(201);
                     }
                     else{
+                        t.rollback();
                         callback(400)
                     }
                 });
