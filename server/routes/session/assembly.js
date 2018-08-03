@@ -4,9 +4,9 @@ var resource = filePath[filePath.length - 1];
 var APICreator = require("../../utils/apiCreator");
 
 
-var get = require('./' + resource + '.get.js');
-var post = require('./' + resource + '.post.js');
-var del = require('./' + resource + '.del.js');
+var get = require('./get.js');
+var post = require('./post.js');
+var del = require('./del.js');
 
 var express = require('express');
 var router = express.Router();

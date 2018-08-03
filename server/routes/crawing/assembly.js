@@ -3,8 +3,8 @@ var filePath = path.resolve(__filename, '../').split('/');
 var resource = filePath[filePath.length - 1];
 var APICreator = require("../../utils/apiCreator");
 
-var gets = require('./' + resource + '.gets.js');
-var post = require('./' + resource + '.post.js');
+var gets = require('./gets.js');
+var post = require('./post.js');
 
 var express = require('express');
 var router = express.Router();
