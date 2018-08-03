@@ -8,6 +8,13 @@ module.exports = function () {
             var data = {};
             var bSuccess = true;
 
+            var reqMethod = req.method;
+            if(reqMethod == 'POST'){
+                data = req.body;
+            }
+            else if(reqMethod == 'GET'){
+                data = req.query
+            }
 
             for (var i = 0, len = aParameterKeys.length; i < len; ++i) {
                 if (data[aParameterKeys[i]]) {

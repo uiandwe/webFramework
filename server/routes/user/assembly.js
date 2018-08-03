@@ -13,14 +13,19 @@ var api = {
 
     post : function(isShowParms) {
         return function(req, res, next) {
-
             var params = {
                 acceptable: [
+                    "salt",
+                    "name"
                 ],
                 essential: [
+                    "salt",
+                    "name"
                 ],
                 resettable: [],
                 explains: {
+                    "salt": "비밀번호",
+                    "name": "사용자 이름"
                 },
                 title: 'user create',
                 state: 'development'
@@ -43,8 +48,6 @@ var api = {
             else{
                 return params
             }
-
-
         };
     }
 };
