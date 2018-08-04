@@ -111,6 +111,7 @@ module.exports = {
                     return createTest(t);
                 }).catch(errorHandler.catchCallback(callback)).done(function (isSuccess) {
                     if (isSuccess) {
+                        t.commit();
                         callback(201);
                     }
                     else{
