@@ -3,7 +3,7 @@ module.exports = {
         res.set('cache-control', 'no-cache, no-store, must-revalidate');
         res.set('pragma',  'no-cache');
         res.set('expires', 0);
-        res.statusCode = status | 200;
+        res.statusCode = status || 200;
         res.setHeader('Content-Type', 'application/json');
         return res.json({status: status, data: data});
     },
