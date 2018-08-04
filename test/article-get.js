@@ -12,9 +12,10 @@ chai.use(chaiHttp);
  * Test the /GET route
  */
 describe('/GETS article', () => {
-    it('it should GETS all the article', (done) => {
+    it('it should GETS all the article 1', (done) => {
         chai.request(server)
             .get('/api/article')
+            .query({ body: 'Test1' })
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.be.a('Object');
@@ -33,19 +34,14 @@ describe('/GETS article', () => {
     });
 });
 
-
+//잘못된 쿼리 스트링
 describe('/GET article', () => {
-    it('it should GET all the article', (done) => {
+    it('it should GETS all the article 2', (done) => {
     chai.request(server)
-        .get('/api/article/-1')
+        .get('/api/article')
+        .query({ val: 'Test1' })
         .end((err, res) => {
-            res.should.have.status(404);
-            res.body.should.be.a('Object');
-            res.body.should.be.a('object').and.have.property('data');
-
-            var article = res.body.data;
-            article.should.equal("데이터 없음");
-
+            res.should.have.status(400);
             done();
         });
     });
