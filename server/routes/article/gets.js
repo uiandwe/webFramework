@@ -1,6 +1,7 @@
 var gets = {};
 var response = require("../../utils/response");
 var fs = require('fs');
+var path = require('path');
 
 gets.validate = function () {
     return function (req, res, next) {
@@ -12,10 +13,10 @@ gets.validate = function () {
 gets.setParameter = function () {
     return function (req, res, next){
 
-        var filePath = '../../static/crud.txt';
+        var filePath = path.resolve(__dirname,  '../../../static/crud.txt');
         fs.readFile(filePath, 'utf8', function(err, data) {
             if(err){
-                return response.success(res, 400, {data:  data })
+                return response.error(res, 400, {data:  data })
             }
 
             var context = JSON.parse(data);
@@ -35,7 +36,7 @@ gets.setParameter = function () {
 
 gets.supplement = function () {
     return function (req, res, next) {
-        return response.success(res, 200, {data:  req.data })
+        return response.success(res, 200, req.data)
 
     };
 };
