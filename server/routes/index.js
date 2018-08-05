@@ -249,7 +249,7 @@ var getApiParams = function(app, categoryName){
     };
 
     for(var index in api){
-        var params = api[index](true)();
+        var params = api[index](true);
         resourceObj.resource.push(params);
         resourceObj.methods.push(api[index].name);
     }
