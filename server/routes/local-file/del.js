@@ -1,66 +1,44 @@
 var del = {};
+var fs = require('fs');
 
-del.validate = function () {
-    return function (req, res, next) {
-        console.log(req.params.id);
-        next();
-
-    };
+del.validate = function (req, res, next) {
+    console.log(req.params.id);
+    next();
 };
 
 
-del.setParameter = function () {
-    return function (req, res, next){
+del.setParameter = function (req, res, next) {
 
-        var fs = require('fs');
-        var filePath = './static/crud.txt';
-        fs.readFile(filePath, 'utf8', function(err, data) {
+    var filePath = './static/crud.txt';
+    fs.readFile(filePath, 'utf8', function(err, data) {
 
-            var context = JSON.parse(data);
+        var context = JSON.parse(data);
 
-            var exist = false;
+        var exist = false;
 
-            for(var i=0; i<context.context.length; i++){
-                if(context.context[i].id == req.params.id){
+        for(var i=0; i<context.context.length; i++){
+            if(context.context[i].id == req.params.id){
 
-                    context.context.splice(i, 1);
-                    fs.writeFile(filePath, JSON.stringify(context), function (err) {
-                        if (err) throw err;
-                        next();
-                    });
+                context.context.splice(i, 1);
+                fs.writeFile(filePath, JSON.stringify(context), function (err) {
+                    if (err) throw err;
+                    next();
+                });
 
-                    exist = true;
+                exist = true;
 
-                }
             }
+        }
 
-            if(exist == false){
-                res.set('cache-control', 'no-cache, no-store, must-revalidate');
-                res.set('pragma',  'no-cache');
-                res.set('expires', 0);
-                res.statusCode = 404;
-                res.setHeader('Content-Type', 'application/json');
+        if(exist == false){
+            return response.error(res, 404, {data:  '데이터 없음' });
+        }
 
-                return res.end(JSON.stringify({data:  '데이터 없음' }));
-            }
-
-        });
-        
-    }
+    });
 };
 
-del.supplement = function () {
-    return function (req, res, next) {
-
-        res.set('cache-control', 'no-cache, no-store, must-revalidate');
-        res.set('pragma',  'no-cache');
-        res.set('expires', 0);
-        res.statusCode = 201;
-        res.setHeader('Content-Type', 'application/json');
-
-        return res.end(JSON.stringify({data:  '' }));
-
-    };
+del.supplement = function (req, res, next) {
+    return response.success(res, 201, {data:  '' });
 };
 
 

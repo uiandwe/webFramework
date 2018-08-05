@@ -1,7 +1,6 @@
 var path = require('path');
 var filePath = path.resolve(__filename, '../').split('/');
 var resource = filePath[filePath.length - 1];
-var APICreator = require("../../utils/apiCreator");
 
 var gets = require('./gets.js');
 var post = require('./post.js');
@@ -12,81 +11,61 @@ var router = express.Router();
 var api = {
 
     gets : function(isShowParms) {
-        return function(req, res, next) {
-
-            var params = {
-                acceptable: [
-                ],
-                essential: [
-                ],
-                resettable: [],
-                explains: {
-                },
-                title: 'list 조회',
-                state: 'development'
-            };
-
-            if(!isShowParms){
-                var apiCreator = new APICreator(req, res, next);
-                apiCreator.add(req.middles.validator(
-                    params.acceptable,
-                    params.essential,
-                    params.resettable
-                ));
-                apiCreator.add(gets.validate());
-                apiCreator.add(gets.setParameter());
-                apiCreator.add(gets.supplement());
-                apiCreator.run();
-
-                delete apiCreator;
-            }
-            else{
-                return params
-            }
-
-
+        var params = {
+            acceptable: [
+            ],
+            essential: [
+            ],
+            resettable: [],
+            explains: {
+            },
+            title: 'list 조회',
+            state: 'development'
         };
+
+        if(!isShowParms){
+            var apiPromiseArray = [];
+
+            apiPromiseArray.push(gets.validate);
+            apiPromiseArray.push(gets.setParameter);
+            apiPromiseArray.push(gets.supplement);
+
+            return apiPromiseArray;
+        }
+        else{
+            return params
+        }
     },
     post : function(isShowParms) {
-        return function(req, res, next) {
-
-            var params = {
-                acceptable: [
-                    "keyword"
-                ],
-                essential: [
-                ],
-                resettable: [],
-                explains: {
-                    "keyword": "검색 키워드"
-                },
-                title: '가격 크롤링',
-                state: 'development'
-            };
-
-            if(!isShowParms){
-                var apiCreator = new APICreator(req, res, next);
-                apiCreator.add(req.middles.validator(
-                    params.acceptable,
-                    params.essential,
-                    params.resettable
-                ));
-                apiCreator.add(post.validate());
-                apiCreator.add(post.getPageList());
-                apiCreator.add(post.getItemDetail());
-                apiCreator.add(post.saveCollectionPage());
-                apiCreator.add(post.saveCollectionItem());
-                apiCreator.add(post.supplement());
-                apiCreator.run();
-
-                delete apiCreator;
-            }
-            else{
-                return params
-            }
-
-
+        var params = {
+            acceptable: [
+                "keyword"
+            ],
+            essential: [
+            ],
+            resettable: [],
+            explains: {
+                "keyword": "검색 키워드"
+            },
+            title: '가격 크롤링',
+            state: 'development'
         };
+
+        if(!isShowParms){
+            var apiPromiseArray = [];
+
+            apiPromiseArray.push(post.validate);
+            apiPromiseArray.push(post.getPageList);
+            apiPromiseArray.push(post.getItemDetail);
+            apiPromiseArray.push(post.saveCollectionPage);
+            apiPromiseArray.push(post.saveCollectionItem);
+            apiPromiseArray.push(post.supplement);
+
+            return apiPromiseArray;
+        }
+        else{
+            return params
+        }
     }
 };
 
