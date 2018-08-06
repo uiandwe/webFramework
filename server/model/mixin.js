@@ -207,8 +207,8 @@ var mixin = {
 
             /**
              * include값을 포함하여 데이터 조회
-             * @param where - {where:{}}
-             * @param include - [{model: sequelize.models.Profile, as: 'profile'}]
+             * @param {Object} where - where절 쿼
+             * @param {Array} include - sequelize include
              * @param callback
              */
             'findDataIncluding': function (where, include, callback) {

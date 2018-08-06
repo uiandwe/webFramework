@@ -82,7 +82,7 @@ module.exports = {
             },
             /**
              * 비밀번호 암호화
-             * @returns
+             * @returns this.salt
              */
             'encryption': function(){
                 this.salt = crypto.randomBytes(16).toString('base64');
