@@ -135,11 +135,14 @@
 
         if($form.attr('method') == 'get'){
             var id = $(".tab-pane.in.active .d-input.d-id").val();
+            if(!id){
+                return ;
+            }
+
             var url =  action+'/'+id;
 
             setResponseModal("GET", url, {id: id});
             sendAjax("GET", url);
-
 
         }
         else if($form.attr('method') == 'gets'){
@@ -156,11 +159,26 @@
             var id = $(".tab-pane.in.active .d-input.d-id").val();
             var url =  action+'/'+id;
 
+            if(!id){
+                return ;
+            }
+
             setResponseModal("PUT", url, {id: id});
             sendAjax("PUT", url, formData);
         }
         else if($form.attr('method') == 'del'){
 
+            var id = $(".tab-pane.in.active .d-input.d-id").val();
+            var url =  action+'/'+id;
+
+            if(!id){
+                return ;
+            }
+
+
+            /*
+            * del 구현 필요
+            * */
         }
         else{ // 에러
             return ;
