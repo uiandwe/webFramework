@@ -14,7 +14,7 @@ var index = require('./server/routes/index');
 var config = require("./server/meta/config/common");
 var sequelize = require("./server/config/sequelize");
 var models = require("./server/config/model");
-var middles = require("./server/middles/index");
+// var middles = require("./server/middles/index");
 var app = express();
 
 //보안
@@ -52,7 +52,7 @@ app.use(cookieParser());
 app.use('/assets', express.static(path.join(__dirname, 'app/assets')));
 app.use('/views', express.static(path.join(__dirname, 'app/views')));
 // app.use('/thumbnails', express.static(__dirname+'/thumbnails'));
-app.use(middles.connect());
+// app.use(middles.connect());
 
 
 app.use(function (req, res, next) {
