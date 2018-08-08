@@ -1,6 +1,7 @@
 var path = require('path');
 var filePath = path.resolve(__filename, '../').split('/');
 var resource = filePath[filePath.length - 1];
+var middleware_validator = require('../../middles/validator');
 
 
 var gets = require('./gets.js');
@@ -28,7 +29,10 @@ var api = {
         };
 
         if(!isShowParms){
+
+
             var apiPromiseArray = [];
+            apiPromiseArray.push(middleware_validator(params));
             apiPromiseArray.push(get.validate);
             apiPromiseArray.push(get.setParameter);
             apiPromiseArray.push(get.supplement);
@@ -58,6 +62,8 @@ var api = {
         };
 
         if(!isShowParms){
+
+
             var apiPromiseArray = [];
             apiPromiseArray.push(gets.validate);
             apiPromiseArray.push(gets.setParameter);
