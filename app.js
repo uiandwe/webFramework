@@ -8,7 +8,7 @@ var session = require("express-session");
 var helmet = require('helmet'),
     blacklist = require('express-blacklist'),
     expressDefend = require('express-defend');
-
+require('dotenv').config();
 
 var index = require('./server/routes/index');
 var config = require("./server/meta/config/common");

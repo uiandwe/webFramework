@@ -4,3 +4,4 @@ npm-debug.log
 static/
 app/assets/bin/
 doc
+.env
