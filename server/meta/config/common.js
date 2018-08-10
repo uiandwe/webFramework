@@ -6,9 +6,9 @@ module.exports = {
     },
     db: {
         database: "web_framework",
-        username: "root",
+        username: process.env.db_username,
         password: process.env.db_password,
-        host: "localhost",
+        host: process.env.db_host,
         port: "3306",
         protocol: "mysql",
         force: false,
