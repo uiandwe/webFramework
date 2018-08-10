@@ -98,7 +98,7 @@ sequelize.sync({force: config.db.force}).then(function (err) {
 });
 
 app.listen(config.app.port, () => {
-  console.log('blog app listening on port '+config.app.port+'!!!!');
+  console.log('app listening on port '+config.app.port+'!!!!');
 });
 
 
