@@ -5,7 +5,7 @@ require('sequelize-definer')(Sequelize);
 var common = require('../meta/config/common');
 
 var connectObject = {
-    host: common.db.hostname,
+    host: common.db.host,
     dialect: common.db.protocol,
     port: common.db.port,
     define: {
@@ -18,7 +18,7 @@ var connectObject = {
     }
 };
 
-if (common.db.hostname == 'localhost') {
+if (common.db.host == 'localhost') {
     connectObject.dialectOptions = {
         socketPath: '/tmp/mysql.sock',
         supportBigNumbers: true,
